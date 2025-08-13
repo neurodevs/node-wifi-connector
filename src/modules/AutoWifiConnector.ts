@@ -8,9 +8,14 @@ export default class AutoWifiConnector implements WifiConnector {
         this.initializeWifiModule()
     }
 
-    public static async Create(options: ConnectionOpts) {
+    public static async Create(options: WifiConnectorOptions) {
+        const { connectOnCreate = true, ...opts } = options
         const instance = new (this.Class ?? this)()
-        await this.wifi.connect(options)
+
+        if (connectOnCreate) {
+            await this.wifi.connect(opts)
+        }
+
         return instance
     }
 
@@ -29,6 +34,10 @@ export default class AutoWifiConnector implements WifiConnector {
 
 export interface WifiConnector {
     disconnect(): Promise<void>
+}
+
+export interface WifiConnectorOptions extends ConnectionOpts {
+    connectOnCreate?: boolean
 }
 
 export type WifiConnectorConstructor = new () => WifiConnector
