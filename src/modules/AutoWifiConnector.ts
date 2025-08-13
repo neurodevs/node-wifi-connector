@@ -1,4 +1,4 @@
-import wifi from 'node-wifi'
+import wifi, { ConnectionOpts } from 'node-wifi'
 
 export default class AutoWifiConnector implements WifiConnector {
     public static Class?: WifiConnectorConstructor
@@ -8,8 +8,10 @@ export default class AutoWifiConnector implements WifiConnector {
         this.initializeWifiModule()
     }
 
-    public static Create() {
-        return new (this.Class ?? this)()
+    public static async Create(options: ConnectionOpts) {
+        const instance = new (this.Class ?? this)()
+        await this.wifi.connect(options)
+        return instance
     }
 
     private initializeWifiModule() {

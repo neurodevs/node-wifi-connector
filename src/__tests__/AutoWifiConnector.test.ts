@@ -1,4 +1,8 @@
-import AbstractSpruceTest, { test, assert } from '@sprucelabs/test-utils'
+import AbstractSpruceTest, {
+    test,
+    assert,
+    generateId,
+} from '@sprucelabs/test-utils'
 import AutoWifiConnector, { WifiConnector } from '../modules/AutoWifiConnector'
 import FakeNodeWifi from '../testDoubles/FakeNodeWifi'
 
@@ -23,7 +27,16 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
         assert.isEqualDeep(
             FakeNodeWifi.callsToInit[0],
             { iface: null },
-            'Need to initialize wifi module with null iface!'
+            'Need to initialize wifi module!'
+        )
+    }
+
+    @test()
+    protected static async callsConnectOnWifiModule() {
+        assert.isEqualDeep(
+            FakeNodeWifi.callsToConnect[0],
+            { ssid: this.ssid, password: this.password },
+            'Need to call connect on wifi module!'
         )
     }
 
@@ -32,7 +45,13 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
         FakeNodeWifi.resetTestDouble()
     }
 
+    private static ssid = generateId()
+    private static password = generateId()
+
     private static AutoWifiConnector() {
-        return AutoWifiConnector.Create()
+        return AutoWifiConnector.Create({
+            ssid: this.ssid,
+            password: this.password,
+        })
     }
 }
