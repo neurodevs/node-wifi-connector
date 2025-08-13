@@ -12,7 +12,10 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
     protected static async beforeEach() {
         await super.beforeEach()
 
+        this.setFakeProcess()
+        this.setFakeExec()
         this.setFakeNodeWifi()
+        this.setNoWaitMs()
 
         this.instance = await this.AutoWifiConnector()
     }
@@ -81,9 +84,36 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
         )
     }
 
+    @test()
+    protected static async usesDifferentDisconnectStrategyForMacOS() {
+        FakeNodeWifi.resetTestDouble()
+        AutoWifiConnector.process = { platform: 'darwin' } as any
+
+        const instance = await this.AutoWifiConnector()
+        await instance.disconnect()
+
+        assert.isEqual(
+            FakeNodeWifi.numCallsToDisconnect,
+            0,
+            'Should not call connect!'
+        )
+    }
+
+    private static setFakeProcess() {
+        AutoWifiConnector.process = { platform: generateId() } as any
+    }
+
+    private static setFakeExec() {
+        AutoWifiConnector.exec = () => Promise.resolve() as any
+    }
+
     private static setFakeNodeWifi() {
         AutoWifiConnector.wifi = new FakeNodeWifi() as any
         FakeNodeWifi.resetTestDouble()
+    }
+
+    private static setNoWaitMs() {
+        AutoWifiConnector.waitMs = 0
     }
 
     private static async createWithoutConnect() {

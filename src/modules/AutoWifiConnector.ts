@@ -1,8 +1,15 @@
+import { exec as _exec } from 'node:child_process'
+import { promisify } from 'node:util'
 import wifi, { ConnectionOpts } from 'node-wifi'
+
+const exec = promisify(_exec)
 
 export default class AutoWifiConnector implements WifiConnector {
     public static Class?: WifiConnectorConstructor
     public static wifi = wifi
+    public static process = process
+    public static exec = exec
+    public static waitMs = 1000
 
     protected constructor() {
         this.initializeWifiModule()
@@ -28,11 +35,45 @@ export default class AutoWifiConnector implements WifiConnector {
     }
 
     public async disconnect() {
+        if (this.process.platform == 'darwin') {
+            await this.disconnectForMacOS()
+            return
+        }
         await this.wifi.disconnect()
+    }
+
+    private async disconnectForMacOS() {
+        await this.turnOffWifiAdapter()
+        await this.waitBeforeReconnect()
+        await this.turnOnWifiAdapter()
+    }
+
+    private async turnOffWifiAdapter() {
+        await this.exec('networksetup -setairportpower "Wi-Fi" off')
+    }
+
+    private waitBeforeReconnect() {
+        return new Promise((resolve) => setTimeout(resolve, this.waitMs))
+    }
+
+    private async turnOnWifiAdapter() {
+        await this.exec('networksetup -setairportpower "Wi-Fi" on')
     }
 
     private get wifi() {
         return AutoWifiConnector.wifi
+    }
+
+    private get process() {
+        return AutoWifiConnector.process
+    }
+
+    private get exec() {
+        return AutoWifiConnector.exec
+    }
+
+    private get waitMs() {
+        return AutoWifiConnector.waitMs
     }
 }
 
