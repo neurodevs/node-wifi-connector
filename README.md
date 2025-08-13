@@ -33,7 +33,6 @@ Or with yarn:
 import AutoWifiConnector from '@neurodevs/node-wifi-connector'
 
 async function main() {
-    // Create and connect on creation
     const wifi = await AutoWifiConnector.Create({
         ssid: 'MyNetwork',
         password: 'SuperSecretPassword',
@@ -41,10 +40,8 @@ async function main() {
     })
     console.log('Connected to Wi-Fi')
 
-    // Wait to allow time for network to connect
     await new Promise((resolve) => setTimeout(resolve, 5000))
 
-    // Disconnect later
     await wifi.disconnect()
     console.log('Disconnected from Wi-Fi')
 }
