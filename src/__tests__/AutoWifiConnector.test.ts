@@ -8,6 +8,7 @@ import FakeNodeWifi from '../testDoubles/FakeNodeWifi'
 
 export default class AutoWifiConnectorTest extends AbstractSpruceTest {
     private static instance: WifiConnector
+    private static callsToExec: string[] = []
 
     protected static async beforeEach() {
         await super.beforeEach()
@@ -86,11 +87,7 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
 
     @test()
     protected static async usesDifferentDisconnectStrategyForMacOS() {
-        FakeNodeWifi.resetTestDouble()
-        AutoWifiConnector.process = { platform: 'darwin' } as any
-
-        const instance = await this.AutoWifiConnector()
-        await instance.disconnect()
+        await this.disconnectForMacOs()
 
         assert.isEqual(
             FakeNodeWifi.numCallsToDisconnect,
@@ -99,12 +96,56 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
         )
     }
 
+    @test()
+    protected static async turnsOffWifiAdapterOnMacOs() {
+        await this.disconnectForMacOs()
+
+        assert.isEqual(
+            this.callsToExec[0],
+            'networksetup -setairportpower "Wi-Fi" off',
+            'Should turn off wifi adapter on MacOS!'
+        )
+    }
+
+    @test()
+    protected static async waitsBeforeReconnectOnMacOs() {
+        const t0 = Date.now()
+        await this.disconnectForMacOs()
+        const t1 = Date.now()
+
+        assert.isTrue(
+            t1 - t0 >= this.waitMs,
+            'Should wait before reconnecting on MacOS!'
+        )
+    }
+
+    @test()
+    protected static async turnsOnWifiAdapterOnMacOs() {
+        await this.disconnectForMacOs()
+
+        assert.isEqual(
+            this.callsToExec[1],
+            'networksetup -setairportpower "Wi-Fi" on',
+            'Should turn on wifi adapter on MacOS!'
+        )
+    }
+
+    private static async disconnectForMacOs() {
+        FakeNodeWifi.resetTestDouble()
+        AutoWifiConnector.process = { platform: 'darwin' } as any
+
+        const instance = await this.AutoWifiConnector()
+        await instance.disconnect()
+    }
+
     private static setFakeProcess() {
         AutoWifiConnector.process = { platform: generateId() } as any
     }
 
     private static setFakeExec() {
-        AutoWifiConnector.exec = () => Promise.resolve() as any
+        AutoWifiConnector.exec = ((cmd: string) => {
+            this.callsToExec.push(cmd)
+        }) as any
     }
 
     private static setFakeNodeWifi() {
@@ -113,7 +154,7 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
     }
 
     private static setNoWaitMs() {
-        AutoWifiConnector.waitMs = 0
+        AutoWifiConnector.waitMs = this.waitMs
     }
 
     private static async createWithoutConnect() {
@@ -127,6 +168,7 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
 
     private static ssid = generateId()
     private static password = generateId()
+    private static waitMs = 5
 
     private static options = {
         ssid: this.ssid,
