@@ -35,11 +35,15 @@ export default class AutoWifiConnector implements WifiConnector {
     }
 
     public async disconnect() {
-        if (this.process.platform == 'darwin') {
+        if (this.platformisMacOS) {
             await this.disconnectForMacOS()
             return
         }
         await this.wifi.disconnect()
+    }
+
+    private get platformisMacOS() {
+        return this.process.platform == 'darwin'
     }
 
     private async disconnectForMacOS() {
