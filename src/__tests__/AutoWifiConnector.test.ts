@@ -14,7 +14,7 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
 
         this.setFakeNodeWifi()
 
-        this.instance = this.AutoWifiConnector()
+        this.instance = await this.AutoWifiConnector()
     }
 
     @test()
@@ -37,6 +37,17 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
             FakeNodeWifi.callsToConnect[0],
             { ssid: this.ssid, password: this.password },
             'Need to call connect on wifi module!'
+        )
+    }
+
+    @test()
+    protected static async callsDisconnectOnWifiModule() {
+        await this.instance.disconnect()
+
+        assert.isEqual(
+            FakeNodeWifi.numCallsToDisconnect,
+            1,
+            'Need to call disconnect on wifi module!'
         )
     }
 

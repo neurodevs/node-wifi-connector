@@ -18,11 +18,17 @@ export default class AutoWifiConnector implements WifiConnector {
         this.wifi.init({ iface: null })
     }
 
+    public async disconnect() {
+        await this.wifi.disconnect()
+    }
+
     private get wifi() {
         return AutoWifiConnector.wifi
     }
 }
 
-export interface WifiConnector {}
+export interface WifiConnector {
+    disconnect(): Promise<void>
+}
 
 export type WifiConnectorConstructor = new () => WifiConnector
