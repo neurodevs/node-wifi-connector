@@ -45,6 +45,25 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
     }
 
     @test()
+    protected static async doesNotConnectIfAlreadyConnected() {
+        await this.instance.connect(this.options)
+
+        assert.isEqual(
+            FakeNodeWifi.callsToConnect.length,
+            1,
+            'Should connect to wifi!'
+        )
+
+        await this.instance.connect(this.options)
+
+        assert.isEqualDeep(
+            FakeNodeWifi.callsToConnect.length,
+            1,
+            'Should not call connect again if already connected!'
+        )
+    }
+
+    @test()
     protected static async callsDisconnectOnWifiModule() {
         await this.instance.disconnect()
 
