@@ -1,10 +1,23 @@
+import wifi from 'node-wifi'
+
 export default class AutoWifiConnector implements WifiConnector {
     public static Class?: WifiConnectorConstructor
+    public static wifi = wifi
 
-    protected constructor() {}
+    protected constructor() {
+        this.initializeWifiModule()
+    }
 
     public static Create() {
         return new (this.Class ?? this)()
+    }
+
+    private initializeWifiModule() {
+        this.wifi.init({ iface: null })
+    }
+
+    private get wifi() {
+        return AutoWifiConnector.wifi
     }
 }
 
