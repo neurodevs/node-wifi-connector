@@ -9,22 +9,21 @@ Connect and disconnect from Wi-Fi networks in Node.js with minimal effort
   - [AutoWifiConnector](#autowificonnector)
 
 ## Overview
-node-wifi-connector is a lightweight utility that wraps the node-wifi library and adds OS-specific disconnect handling for macOS.
-On Linux and Windows, disconnect calls go directly through node-wifi. On macOS, where node-wifi’s disconnect() is not implemented, the package toggles the Wi-Fi adapter off and back on via networksetup to ensure a clean disconnect.
+node-wifi-connector is a lightweight utility that wraps the node-wifi library to provide a simple, minimal-effort interface for connecting to and disconnecting from Wi-Fi networks in Node.js.
 
 ## Installation
 Install the package with your preferred package manager (run inside your Node project):
 
-npm install @neurodevs/node-wifi-connector
+`npm install @neurodevs/node-wifi-connector`
 
 Or with yarn:
 
-yarn add @neurodevs/node-wifi-connector
+`yarn add @neurodevs/node-wifi-connector`
 
-### Platform Notes 
-- Linux and Windows: Uses node-wifi for connect() and disconnect().
-- macOS (darwin): Uses networksetup to toggle Wi-Fi off and on for disconnect(), ensuring it works even though node-wifi’s disconnect() is not supported.
-- Service name: Defaults to "Wi-Fi". If your network service is renamed or localized, you may need to adjust the command in the source.
+### Platform Notes
+- Linux/Windows: connect() and disconnect() use node-wifi directly.
+- macOS (darwin): node-wifi does not implement disconnect() for macOS, so this package uses networksetup to toggle Wi-Fi off/on for a reliable disconnect. Adjust network priority to prevent auto-reconnect.
+- Service name defaults to "Wi-Fi"; update in source if renamed or localized. 
 
 ## Usage
 
