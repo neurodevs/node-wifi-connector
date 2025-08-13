@@ -53,12 +53,7 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
 
     @test()
     protected static async providesOptionToNotConnectOnCreate() {
-        FakeNodeWifi.resetTestDouble()
-
-        await AutoWifiConnector.Create({
-            ...this.options,
-            connectOnCreate: false,
-        })
+        await this.createWithoutConnect()
 
         assert.isEqualDeep(
             FakeNodeWifi.callsToConnect.length,
@@ -67,9 +62,37 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
         )
     }
 
+    @test()
+    protected static async exposesConnectMethod() {
+        const instance = await this.createWithoutConnect()
+
+        assert.isEqual(
+            FakeNodeWifi.callsToConnect.length,
+            0,
+            'Should not call connect yet!'
+        )
+
+        await instance.connect(this.options)
+
+        assert.isEqualDeep(
+            FakeNodeWifi.callsToConnect[0],
+            this.options,
+            'Should call connect on wifi module!'
+        )
+    }
+
     private static setFakeNodeWifi() {
         AutoWifiConnector.wifi = new FakeNodeWifi() as any
         FakeNodeWifi.resetTestDouble()
+    }
+
+    private static async createWithoutConnect() {
+        FakeNodeWifi.resetTestDouble()
+
+        return await AutoWifiConnector.Create({
+            ...this.options,
+            connectOnCreate: false,
+        })
     }
 
     private static ssid = generateId()

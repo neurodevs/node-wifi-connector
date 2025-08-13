@@ -13,7 +13,7 @@ export default class AutoWifiConnector implements WifiConnector {
         const instance = new (this.Class ?? this)()
 
         if (connectOnCreate) {
-            await this.wifi.connect(opts)
+            await instance.connect(opts)
         }
 
         return instance
@@ -21,6 +21,10 @@ export default class AutoWifiConnector implements WifiConnector {
 
     private initializeWifiModule() {
         this.wifi.init({ iface: null })
+    }
+
+    public async connect(options: ConnectionOpts) {
+        await this.wifi.connect(options)
     }
 
     public async disconnect() {
@@ -33,6 +37,7 @@ export default class AutoWifiConnector implements WifiConnector {
 }
 
 export interface WifiConnector {
+    connect(options: WifiConnectorOptions): Promise<void>
     disconnect(): Promise<void>
 }
 
