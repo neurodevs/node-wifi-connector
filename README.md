@@ -22,7 +22,7 @@ Or with yarn:
 
 ### Platform Notes
 - Linux/Windows: connect() and disconnect() use node-wifi directly.
-- macOS (darwin): node-wifi does not implement disconnect() for macOS, so this package uses networksetup to toggle Wi-Fi off/on for a reliable disconnect. Adjust network priority to prevent auto-reconnect.
+- macOS (darwin): node-wifi does not implement disconnect() for macOS, so this package uses networksetup to toggle Wi-Fi off/on for a reliable disconnect. Adjust network priority to prevent auto-reconnect to the network you just disconnected.
 - Service name defaults to "Wi-Fi"; update in source if renamed or localized. 
 
 ## Usage
