@@ -39,8 +39,15 @@ export default class AutoWifiConnector implements WifiConnector {
     }
 
     private async isConnected(ssid: string) {
-        const currentConnections = await this.wifi.getCurrentConnections()
-        return currentConnections.some((conn) => conn.ssid === ssid)
+        const currentSsid = await this.getCurrentConnection()
+        return currentSsid == ssid
+    }
+
+    private async getCurrentConnection() {
+        const { stdout } = await this.exec(
+            `networksetup -listpreferredwirelessnetworks en0 | sed -n '2 p' | tr -d '\t'`
+        )
+        return stdout.trim()
     }
 
     public async disconnect() {

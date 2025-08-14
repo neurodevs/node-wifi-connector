@@ -8,7 +8,8 @@ import FakeNodeWifi from '../testDoubles/FakeNodeWifi'
 
 export default class AutoWifiConnectorTest extends AbstractSpruceTest {
     private static instance: WifiConnector
-    private static callsToExec: string[] = []
+    private static callsToExec: string[]
+    private static returnExecResult: boolean
 
     protected static async beforeEach() {
         await super.beforeEach()
@@ -46,6 +47,8 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
 
     @test()
     protected static async doesNotConnectIfAlreadyConnected() {
+        this.setReturnExecResultTrue()
+
         await this.instance.connect(this.options)
 
         assert.isEqual(
@@ -117,10 +120,12 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
 
     @test()
     protected static async turnsOffWifiAdapterOnMacOs() {
+        this.setReturnExecResultTrue()
+
         await this.disconnectForMacOs()
 
         assert.isEqual(
-            this.callsToExec[0],
+            this.callsToExec[2],
             'networksetup -setairportpower "Wi-Fi" off',
             'Should turn off wifi adapter on MacOS!'
         )
@@ -143,7 +148,7 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
         await this.disconnectForMacOs()
 
         assert.isEqual(
-            this.callsToExec[1],
+            this.callsToExec[3],
             'networksetup -setairportpower "Wi-Fi" on',
             'Should turn on wifi adapter on MacOS!'
         )
@@ -162,8 +167,14 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
     }
 
     private static setFakeExec() {
+        this.callsToExec = []
+        this.returnExecResult = false
+
         AutoWifiConnector.exec = ((cmd: string) => {
             this.callsToExec.push(cmd)
+            return this.returnExecResult
+                ? { stdout: this.ssid }
+                : { stdout: '' }
         }) as any
     }
 
@@ -174,6 +185,10 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
 
     private static setNoWaitMs() {
         AutoWifiConnector.waitMs = this.waitMs
+    }
+
+    private static setReturnExecResultTrue() {
+        this.returnExecResult = true
     }
 
     private static async createWithoutConnect() {
