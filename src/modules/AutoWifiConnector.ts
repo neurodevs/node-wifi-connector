@@ -44,10 +44,22 @@ export default class AutoWifiConnector implements WifiConnector {
     }
 
     private async getCurrentConnection() {
+        if (this.platformisMacOS) {
+            return this.getCurrentConnectionForMacOS()
+        }
+        return await this.getCurrentConnectionNotMacOS()
+    }
+
+    private async getCurrentConnectionForMacOS() {
         const { stdout } = await this.exec(
             `networksetup -listpreferredwirelessnetworks en0 | sed -n '2 p' | tr -d '\t'`
         )
         return stdout.trim()
+    }
+
+    private async getCurrentConnectionNotMacOS() {
+        const networks = await this.wifi.getCurrentConnections()
+        return networks.length > 0 ? networks[0].ssid : null
     }
 
     public async disconnect() {

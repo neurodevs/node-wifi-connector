@@ -46,9 +46,28 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
     }
 
     @test()
-    protected static async doesNotConnectIfAlreadyConnected() {
+    protected static async doesNotConnectIfAlreadyConnectedOnMacOS() {
         this.setReturnExecResultTrue()
 
+        await this.instance.connect(this.options)
+
+        assert.isEqual(
+            FakeNodeWifi.callsToConnect.length,
+            1,
+            'Should connect to wifi!'
+        )
+
+        await this.instance.connect(this.options)
+
+        assert.isEqualDeep(
+            FakeNodeWifi.callsToConnect.length,
+            1,
+            'Should not call connect again if already connected!'
+        )
+    }
+
+    @test()
+    protected static async doesNotConnectIfAlreadyConnectedOnOtherOS() {
         await this.instance.connect(this.options)
 
         assert.isEqual(
@@ -109,7 +128,7 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
 
     @test()
     protected static async usesDifferentDisconnectStrategyForMacOS() {
-        await this.disconnectForMacOs()
+        await this.disconnectForMacOS()
 
         assert.isEqual(
             FakeNodeWifi.numCallsToDisconnect,
@@ -119,22 +138,23 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
     }
 
     @test()
-    protected static async turnsOffWifiAdapterOnMacOs() {
+    protected static async turnsOffWifiAdapterOnMacOS() {
         this.setReturnExecResultTrue()
 
-        await this.disconnectForMacOs()
+        await this.disconnectForMacOS()
 
+        debugger
         assert.isEqual(
-            this.callsToExec[2],
+            this.callsToExec[1],
             'networksetup -setairportpower "Wi-Fi" off',
             'Should turn off wifi adapter on MacOS!'
         )
     }
 
     @test()
-    protected static async waitsBeforeReconnectOnMacOs() {
+    protected static async waitsBeforeReconnectOnMacOS() {
         const t0 = Date.now()
-        await this.disconnectForMacOs()
+        await this.disconnectForMacOS()
         const t1 = Date.now()
 
         assert.isTrue(
@@ -144,22 +164,26 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
     }
 
     @test()
-    protected static async turnsOnWifiAdapterOnMacOs() {
-        await this.disconnectForMacOs()
+    protected static async turnsOnWifiAdapterOnMacOS() {
+        await this.disconnectForMacOS()
 
         assert.isEqual(
-            this.callsToExec[3],
+            this.callsToExec[2],
             'networksetup -setairportpower "Wi-Fi" on',
             'Should turn on wifi adapter on MacOS!'
         )
     }
 
-    private static async disconnectForMacOs() {
+    private static async disconnectForMacOS() {
         FakeNodeWifi.resetTestDouble()
-        AutoWifiConnector.process = { platform: 'darwin' } as any
+        this.fakeProcessPlatform()
 
         const instance = await this.AutoWifiConnector()
         await instance.disconnect()
+    }
+
+    private static fakeProcessPlatform(platform = 'darwin') {
+        AutoWifiConnector.process = { platform } as any
     }
 
     private static setFakeProcess() {
