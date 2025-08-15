@@ -14,11 +14,15 @@ node-wifi-connector is a lightweight utility that wraps the node-wifi library to
 ## Installation
 Install the package with your preferred package manager (run inside your Node project):
 
-`npm install @neurodevs/node-wifi-connector`
+```bash
+npm install @neurodevs/node-wifi-connector
+```
 
 Or with yarn:
 
-`yarn add @neurodevs/node-wifi-connector`
+```bash
+yarn add @neurodevs/node-wifi-connector
+```
 
 ### Platform Notes
 - Linux/Windows: connect() and disconnect() use node-wifi directly.
