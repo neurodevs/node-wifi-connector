@@ -1,6 +1,7 @@
 {
   "name": "@neurodevs/node-wifi-connector",
   "version": "1.1.2",
+  "description": "Connect to Wi-Fi with minimal effort.",
   "main": "build/index.js",
   "repository": "https://github.com/neurodevs/node-wifi-connector.git",
   "scripts": {
@@ -25,6 +26,9 @@
     "watch.rebuild": "yarn run clean.all && yarn install && yarn run watch.build.dev",
     "watch.tsc": "tsc -w"
   },
+  "dependencies": {
+    "node-wifi": "^2.0.16"
+  },
   "devDependencies": {
     "@sprucelabs/jest-json-reporter": "^9.0.35",
     "@sprucelabs/resolve-path-aliases": "^3.0.18",
@@ -42,15 +46,11 @@
     "tsc-watch": "^7.1.1",
     "typescript": "^5.9.2"
   },
-  "description": "Connect to Wi-Fi with minimal effort",
-  "skill": {
-    "namespace": "node-wifi-connector"
-  },
   "jest": {
     "testRunner": "jest-circus/runner",
-    "maxWorkers": 4,
-    "testTimeout": 120000,
     "testEnvironment": "node",
+    "testTimeout": 120000,
+    "maxWorkers": 4,
     "testPathIgnorePatterns": [
       "<rootDir>/tmp/",
       "<rootDir>/src/",
@@ -64,7 +64,7 @@
       "^#spruce/(.*)$": "<rootDir>/build/.spruce/$1"
     }
   },
-  "dependencies": {
-    "node-wifi": "^2.0.16"
+  "skill": {
+    "namespace": "node-wifi-connector"
   }
 }
