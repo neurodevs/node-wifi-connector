@@ -2,8 +2,22 @@
   "name": "@neurodevs/node-wifi-connector",
   "version": "1.1.2",
   "description": "Connect to Wi-Fi with minimal effort.",
+  "keywords": [
+    "nodejs",
+    "typescript",
+    "tdd"
+  ],
+  "license": "MIT",
+  "author": "Eric Yates <hello@ericthecurious.com>",
+  "homepage": "https://github.com/neurodevs/node-wifi-connector",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neurodevs/node-wifi-connector.git"
+  },
+  "bugs": {
+    "url": "https://github.com/neurodevs/node-wifi-connector/issues"
+  },
   "main": "build/index.js",
-  "repository": "https://github.com/neurodevs/node-wifi-connector.git",
   "scripts": {
     "build.ci": "yarn run build.tsc && yarn run build.resolve-paths && yarn run lint",
     "build.dev": "yarn run build.tsc --sourceMap ; yarn run resolve-paths.lint",
