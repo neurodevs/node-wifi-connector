@@ -3,8 +3,8 @@ import AbstractSpruceTest, {
     assert,
     generateId,
 } from '@sprucelabs/test-utils'
-import AutoWifiConnector, { WifiConnector } from '../modules/AutoWifiConnector'
-import FakeNodeWifi from '../testDoubles/FakeNodeWifi'
+import AutoWifiConnector, { WifiConnector } from '../../impl/AutoWifiConnector'
+import FakeNodeWifi from '../../testDoubles/node-wifi/FakeNodeWifi'
 
 export default class AutoWifiConnectorTest extends AbstractSpruceTest {
     private static instance: WifiConnector

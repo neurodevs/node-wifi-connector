@@ -1,4 +1,4 @@
-import AutoWifiConnector from '../modules/AutoWifiConnector'
+import AutoWifiConnector from '../impl/AutoWifiConnector'
 
 async function main() {
     const wifi = await AutoWifiConnector.Create({

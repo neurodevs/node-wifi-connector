@@ -1,5 +1,7 @@
-export { default as AutoWifiConnector } from './modules/AutoWifiConnector'
-export * from './modules/AutoWifiConnector'
+//
 
-export { default as FakeWifiConnector } from './testDoubles/FakeWifiConnector'
-export * from './testDoubles/FakeWifiConnector'
+export { default as AutoWifiConnector } from './impl/AutoWifiConnector'
+export * from './impl/AutoWifiConnector'
+
+export { default as FakeWifiConnector } from './testDoubles/WifiConnector/FakeWifiConnector'
+export * from './testDoubles/WifiConnector/FakeWifiConnector'
