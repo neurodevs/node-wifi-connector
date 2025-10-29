@@ -1,5 +1,6 @@
 import { ConnectionOpts } from 'node-wifi'
-import { WifiConnector } from '../../impl/AutoWifiConnector'
+
+import { WifiConnector } from '../../impl/AutoWifiConnector.js'
 
 export default class FakeWifiConnector implements WifiConnector {
     public static numCallsToConstructor = 0

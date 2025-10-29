@@ -1,9 +1,11 @@
-import AbstractSpruceTest, { test, assert } from '@sprucelabs/test-utils'
-import generateId from '@neurodevs/generate-id'
-import AutoWifiConnector, { WifiConnector } from '../../impl/AutoWifiConnector'
-import FakeNodeWifi from '../../testDoubles/node-wifi/FakeNodeWifi'
+import AbstractModuleTest, { test, assert } from '@neurodevs/node-tdd'
 
-export default class AutoWifiConnectorTest extends AbstractSpruceTest {
+import AutoWifiConnector, {
+    WifiConnector,
+} from '../../impl/AutoWifiConnector.js'
+import FakeNodeWifi from '../../testDoubles/node-wifi/FakeNodeWifi.js'
+
+export default class AutoWifiConnectorTest extends AbstractModuleTest {
     private static instance: WifiConnector
     private static callsToExec: string[]
     private static returnExecResult: boolean
@@ -184,7 +186,7 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
     }
 
     private static setFakeProcess() {
-        AutoWifiConnector.process = { platform: generateId() } as any
+        AutoWifiConnector.process = { platform: this.generateId() } as any
     }
 
     private static setFakeExec() {
@@ -221,8 +223,8 @@ export default class AutoWifiConnectorTest extends AbstractSpruceTest {
         })
     }
 
-    private static ssid = generateId()
-    private static password = generateId()
+    private static ssid = this.generateId()
+    private static password = this.generateId()
     private static waitMs = 5
 
     private static options = {
