@@ -45,7 +45,7 @@
     "node-wifi": "^2.0.16"
   },
   "devDependencies": {
-    "@neurodevs/generate-id": "^1.0.0",
+    "@neurodevs/generate-id": "1.1.1",
     "@neurodevs/node-tdd": "^0.2.3",
     "@types/node": "^24.2.1",
     "@types/node-wifi": "^2.0.2",
