@@ -1,11 +1,12 @@
-import AbstractModuleTest, { test, assert } from '@neurodevs/node-tdd'
+import { test, assert } from '@neurodevs/node-tdd'
 
 import AutoWifiConnector, {
     WifiConnector,
 } from '../../impl/AutoWifiConnector.js'
 import FakeNodeWifi from '../../testDoubles/node-wifi/FakeNodeWifi.js'
+import AbstractPackageTest from '../AbstractPackageTest.js'
 
-export default class AutoWifiConnectorTest extends AbstractModuleTest {
+export default class AutoWifiConnectorTest extends AbstractPackageTest {
     private static instance: WifiConnector
     private static callsToExec: string[]
     private static returnExecResult: boolean
