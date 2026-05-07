@@ -6,9 +6,9 @@ Connect and disconnect from Wi-Fi networks in Node.js with minimal effort
 
 - [Overview](#overview)
 - [Installation](#installation)
-    - [Platform Notes](#platformnotes)
+  - [Platform Notes](#platformnotes)
 - [Usage](#usage)
-    - [AutoWifiConnector](#autowificonnector)
+  - [AutoWifiConnector](#autowificonnector)
 
 ## Overview
 
@@ -42,20 +42,20 @@ yarn add @neurodevs/node-wifi-connector
 import AutoWifiConnector from '@neurodevs/node-wifi-connector'
 
 async function main() {
-    const wifi = await AutoWifiConnector.Create({
-        ssid: 'MyNetwork',
-        password: 'SuperSecretPassword',
-        connectOnCreate: true,
-    })
-    console.log('Connected to Wi-Fi')
+  const wifi = await AutoWifiConnector.Create({
+    ssid: 'MyNetwork',
+    password: 'SuperSecretPassword',
+    connectOnCreate: true,
+  })
+  console.log('Connected to Wi-Fi')
 
-    await new Promise((resolve) => setTimeout(resolve, 5000))
+  await new Promise((resolve) => setTimeout(resolve, 5000))
 
-    await wifi.disconnect()
-    console.log('Disconnected from Wi-Fi')
+  await wifi.disconnect()
+  console.log('Disconnected from Wi-Fi')
 }
 
 main().catch((err) => {
-    console.error('Error:', err)
+  console.error('Error:', err)
 })
 ```
