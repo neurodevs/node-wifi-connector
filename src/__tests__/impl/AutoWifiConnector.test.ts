@@ -143,7 +143,6 @@ export default class AutoWifiConnectorTest extends AbstractPackageTest {
 
         await this.disconnectForMacOS()
 
-        debugger
         assert.isEqual(
             this.callsToExec[1],
             'networksetup -setairportpower "Wi-Fi" off',
